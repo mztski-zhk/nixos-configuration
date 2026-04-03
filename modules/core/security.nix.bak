@@ -1,0 +1,17 @@
+{ config, lib, pkgs, ... }:
+
+{
+  # <-- Audio Realtime Kit -->
+  security.rtkit.enable = true;
+  
+  # <-- Firewall -->
+  networking.firewall.enable = false;
+
+  # <-- SSH & GPG -->
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+  services.openssh.enable = true;
+}
+

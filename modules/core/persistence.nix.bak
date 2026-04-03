@@ -1,0 +1,42 @@
+{ config, lib, pkgs, ... }:
+
+{
+#  programs.fuse.userAllowOther = true;
+
+#  environment.persistence."/persist" = {
+#    hideMounts = true;
+#    directories = [
+#      "/etc/nixos"
+#      "/var/log"
+#      "/var/lib/bluetooth"
+#      "/var/lib/nixos"
+#      "/var/lib/systemd/coredump"
+#      "/etc/networkmanager/system-connections"
+#    ];
+#    files = [
+#      "/etc/machine-id"
+      # /etc/shadow is safely omitted
+#    ];
+    
+#    users.mztski-zhk = {
+#      directories = [
+#        "Downloads"
+#        "Music"
+#        "Pictures"
+#        "Documents"
+#        "Videos"
+#        ".local/share/direnv"
+#        ".ssh"
+#        ".config/niri"
+#      ];
+ #   };
+#  };
+
+  # <-- Force machine-id to persist correctly -->
+#  system.activationScripts.iron-machine-id = ''
+#    mkdir -p /persist/etc
+#    touch /persist/etc/machine-id
+#    ln -snf /persist/etc/machine-id /etc/machine-id
+#  '';
+}
+
