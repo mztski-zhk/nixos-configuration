@@ -18,6 +18,14 @@
     packages.myNiri = inputs.wrapper-modules.wrappers.niri.wrap {
       inherit pkgs;
       settings = {
+
+        debug = {
+          # Use amd to render niri 65:0:0:0
+          render-drm-device = "/dev/dri/renderD128";
+          # Ignore nvidia gpu 64:0:0:0
+          ignore-drm-device = [ "/dev/dri/renderD129" ];
+        };
+
         
         outputs."eDP-1" = {
           mode = "2560x1600@165";
@@ -28,7 +36,7 @@
 
         spawn-at-startup = [
           (lib.getExe self'.packages.myNoctalia)
-          #(lib.getExe pkgs.xwayland-satellite)
+          (lib.getExe pkgs.xwayland-satellite)
           #{ "foot" "--server" };
         ];
 

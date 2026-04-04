@@ -54,19 +54,6 @@
     };
 
 
-  programs.git = {
-    enable = true;
-    userName  = "mztski-zhk";
-    userEmail = "mztski.zhk@gmail.com";
-    
-    # Optional but highly recommended:
-    config = {
-      init.defaultBranch = "main"; # Changes the default branch from 'master' to 'main'
-      pull.rebase = true;          # Prevents messy merge commits when pulling
-    };
-  };
-
-
     # <-- Audio -->
     services.pipewire = {
       enable = true;
@@ -85,6 +72,7 @@
       wget
       curl
 
+      xwayland-satellite
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
     ];
@@ -142,6 +130,11 @@
       };
     };
 
+
+    # <-- Password -->
+    services.gnome.gnome-keyring.enable = false;
+    security.pam.services.greetd.enableGnomeKeyring = false;
+
     # <-- Shell -->
     programs.zsh = {
       enable = true;
@@ -182,13 +175,14 @@
     hardware.graphics.enable32Bit = true;
 
     # <-- NVIDIA Driver -->
-    services.xserver.videoDrivers = ["amdgpu" "nvidia"];
+    boot.initrd.kernelModules = [ "amdgpu" ];
+    services.xserver.videoDrivers = [ "nvidia" ];
 
     hardware.nvidia = {
       modesetting.enable = true;
-      powerManagement.enable = true; # Necessary for suspend/resume
-      powerManagement.finegrained = true; # Turns off GPU when not in use
-      open = true; # Use the NVIDIA Open Kernel Module (Recommended for 40-series)
+      powerManagement.enable = true;
+      powerManagement.finegrained = true;
+      open = true;
       nvidiaSettings = true;
 
       # Hybrid Graphic
@@ -197,8 +191,8 @@
           enable = true;
           enableOffloadCmd = true;
         };
-        amdgpuBusId = "PCI:101:00:0";
-        nvidiaBusId = "PCI:100:00:0";
+        nvidiaBusId = "PCI:100:0:0";
+        amdgpuBusId = "PCI:101:0:0";
       };
     };
 

@@ -11,6 +11,19 @@
     NIXOS_OZONE_WL = "1"; 
   };
 
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name  = "mztski-zhk";
+        email = "mztski.zhk@gmail.com";
+      };
+
+      init.defaultBranch = "main";
+      pull.rebase = true;
+    };
+  };
+
   programs.alacritty = {
     enable = true;
   };
@@ -142,19 +155,63 @@
     ];
   };
 
+  programs.vivaldi = {
+    enable = true;
+    nativeMessagingHosts = [ pkgs.keepassxc ];
+  };
+
   programs.keepassxc = {
     autostart = true;
     enable = true;
     settings = {
-      FdoSecrets.Enabled = true; # Enable Secret Service Integration
+      FdoSecrets.Enabled = true;
     };
   };
 
-  xdg.autostart.enable = true; # Enable creation of XDG autostart entries.
+  xdg.configFile."keepassxc/keepassxc.ini".text = ''
+    [General]
+    ConfigVersion=2
+    Theme=dark
+
+    [Browser]
+    Enabled=true
+    Vivaldi=true
+
+    [GUI]
+    ApplicationTheme=dark
+    MinimizeOnStartup=true
+    MinimizeToTray=true
+    ShowTrayIcon=true
+  '';
+
+  home.file.".config/vivaldi/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json".text = ''
+    {
+        "allowed_origins": [
+            "chrome-extension://oboonakemofmacngalckimiemjbgfkcp/",
+            "chrome-extension://pdffhmdignnpjigcbgkpgndedebnjlha/"
+        ],
+        "description": "KeePassXC integration with native messaging",
+        "name": "org.keepassxc.keepassxc_browser",
+        "path": "${pkgs.keepassxc}/bin/keepassxc-proxy",
+        "type": "stdio"
+    }
+  '';
+
+  home.file.".config/vivaldi/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json".source = "${pkgs.keepassxc}/share/keepassxc/browser_integration/keepassxc-browser-chromium.json";
+
+  xdg = {
+    autostart.enable = true;
+    portal.config = {
+      common = {
+        default = [ "*" ];
+        "org.freedesktop.impl.portal.Secret" = [ "keepassxc" ];
+      };
+    };
+  };
+ 
+
 
   home.packages = with pkgs; [
-    vivaldi
-
     ripgrep
     fd
     gcc
@@ -179,6 +236,7 @@
 
     fastfetch
     btop
+    nvtopPackages.full
 
     python3
     nodejs

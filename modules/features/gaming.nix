@@ -1,23 +1,33 @@
 { self, inputs, ... }: {
 
   flake.nixosModules.gaming = { pkgs, lib, ... }: {
+    
     programs.steam = {
       enable = true;
       gamescopeSession.enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+    };
+
+    programs.gamescope = {
+      enable = true;
+      capSysNice = true;
     };
 
     programs.gamemode.enable = true;
-  };
 
-  perSystem = { pkgs, ... }: {
+    environment.systemPackages = with pkgs; [
+      lsfg-vk
+      lsfg-vk-ui
 
-    packages.myGaming = inputs.wrapper-modules.wrappers.myGaming.wrap {
-      inherit pkgs;
-      
-      environment.systemPackages = with pkgs; [
-        mongohud
-        lutris
-      ];
-    };
+      mangohud
+      goverlay
+      lutris
+      heroic
+      protonup-qt
+      winetricks
+      wineWow64Packages.waylandFull
+    ];
   };
 }
+
