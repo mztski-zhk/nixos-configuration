@@ -11,6 +11,28 @@
     NIXOS_OZONE_WL = "1"; 
   };
 
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    mouse = true;
+    terminal = "foot";
+
+    extraConfig = ''
+      set -g mouse on
+
+      setw -g mode-keys vi
+
+      set -g set-clipboard on
+      set -as terminal-features ',foot:clipboard'
+    '';
+  };
+
   programs.git = {
     enable = true;
     settings = {
@@ -24,9 +46,41 @@
     };
   };
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Catppuccin-Macchiato-Standard-Blue-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        accents = [ "blue" ];
+        size = "standard";
+        variant = "macchiato";
+      };
+    };
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.catppuccin-papirus-folders.override {
+        flavor = "macchiato";
+        accent = "blue";
+      };
+    };
+    cursorTheme = {
+      name = "Catppuccin-Macchiato-Dark-Cursors";
+      package = pkgs.catppuccin-cursors.macchiatoDark;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "qtct";
+    style.name = "kvantum";
+  };
+
+
   programs.alacritty = {
     enable = true;
   };
+
+  programs.foot.enable = true;
 
 #   programs.foot = {
 #     enable = true;
@@ -67,23 +121,6 @@
 #    };
 #  };
 
-  programs.tmux = {
-    enable = true;
-    clock24 = true;
-    mouse = true;
-    terminal = "foot";
-
-    # Ensure clipboard works in Wayland
-    extraConfig = ''
-      set -g mouse on
-
-      setw -g mode-keys vi
-
-      set -g set-clipboard on
-      set -as terminal-features ',foot:clipboard'
-    '';
-  };
-
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -95,7 +132,6 @@
     enable = true;
     profiles.default.extensions = with pkgs.vscode-extensions; [
       yzhang.markdown-all-in-one
-      vscodevim.vim
       vscode-icons-team.vscode-icons
       usernamehw.errorlens
       timonwong.shellcheck
@@ -157,65 +193,28 @@
 
   programs.vivaldi = {
     enable = true;
-    nativeMessagingHosts = [ pkgs.keepassxc ];
   };
-
-  programs.keepassxc = {
-    autostart = true;
-    enable = true;
-    settings = {
-      FdoSecrets.Enabled = true;
-    };
-  };
-
-  xdg.configFile."keepassxc/keepassxc.ini".text = ''
-    [General]
-    ConfigVersion=2
-    Theme=dark
-
-    [Browser]
-    Enabled=true
-    Vivaldi=true
-
-    [GUI]
-    ApplicationTheme=dark
-    MinimizeOnStartup=true
-    MinimizeToTray=true
-    ShowTrayIcon=true
-  '';
-
-  home.file.".config/vivaldi/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json".text = ''
-    {
-        "allowed_origins": [
-            "chrome-extension://oboonakemofmacngalckimiemjbgfkcp/",
-            "chrome-extension://pdffhmdignnpjigcbgkpgndedebnjlha/"
-        ],
-        "description": "KeePassXC integration with native messaging",
-        "name": "org.keepassxc.keepassxc_browser",
-        "path": "${pkgs.keepassxc}/bin/keepassxc-proxy",
-        "type": "stdio"
-    }
-  '';
-
-  home.file.".config/vivaldi/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json".source = "${pkgs.keepassxc}/share/keepassxc/browser_integration/keepassxc-browser-chromium.json";
 
   xdg = {
     autostart.enable = true;
     portal.config = {
       common = {
         default = [ "*" ];
-        "org.freedesktop.impl.portal.Secret" = [ "keepassxc" ];
       };
     };
   };
  
-
 
   home.packages = with pkgs; [
     ripgrep
     fd
     gcc
     unzip
+    gnutar
+    p7zip
+
+    websocat
+    zenity
 
     brightnessctl
     ddcutil
@@ -240,6 +239,14 @@
 
     python3
     nodejs
+
+    pinentry-all # GnuPG
+    bitwarden-desktop
+    rbw
+
+    discord
+
+    obsidian
 
     (prismlauncher.override {
     jdks = [

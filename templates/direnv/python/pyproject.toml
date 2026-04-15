@@ -1,0 +1,31 @@
+[project]
+name = "my-ml-project"
+version = "0.0.1"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "vllm" 
+    "nvidia-cuda-runtime-cu12"
+]
+
+[tool.uv]
+prerelease = "allow"
+
+[[tool.uv.index]]
+name = "vllm-nightly"
+url = "https://wheels.vllm.ai/nightly"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu132"
+url = "https://download.pytorch.org/whl/cu132"
+explicit = true
+
+[tool.uv.sources]
+vllm = { index = "vllm-nightly" }
+
+torch = { index = "pytorch-cu132" }
+torchvision = { index = "pytorch-cu132" }
+torchaudio = { index = "pytorch-cu132" }
+

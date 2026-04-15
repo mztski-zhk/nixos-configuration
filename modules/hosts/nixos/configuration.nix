@@ -12,26 +12,12 @@
     ...
   }: {
     imports = [
-      # Hardware scan
       self.nixosModules.nixosHardware
       self.nixosModules.niri
       self.nixosModules.gaming
 
       inputs.home-manager.nixosModules.home-manager
       inputs.impermanence.nixosModules.impermanence
-
-      # Core Modules
-      #      ../../core/boot.nix
-      #      ../../core/security.nix
-      #      ../../core/persistence.nix
-
-      # Desktop Modules
-      # ../../desktop/niri.nix
-      # ../../modules/desktop/fonts.nix
-
-      # App Modules
-      # ../../modules/apps/steam.nix
-      # ../../modules/apps/vivaldi.nix
     ];
 
     # <-- Core System Settings -->
@@ -41,6 +27,9 @@
     networking.networkmanager.enable = true;
     time.timeZone = "Asia/Hong_Kong";
     i18n.defaultLocale = "en_US.UTF-8";
+
+    boot.kernelParams = [ "acpi_backlight=vendor" ];
+
 
     nix.settings = {
       substituters = [
@@ -62,6 +51,7 @@
       pulse.enable = true;
     };
 
+
     # <-- System Packages -->
     environment.systemPackages = with pkgs; [
       vim
@@ -71,25 +61,33 @@
       git
       wget
       curl
+      jq
 
       xwayland-satellite
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
+
+      tailscale
     ];
 
     fonts = {
       enableDefaultPackages = true;
       packages = with pkgs; [
-        nerd-fonts.ubuntu
-        nerd-fonts.ubuntu-sans
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-cjk-serif
+        noto-fonts-color-emoji
+
+        jetbrains-mono
+
         nerd-fonts.jetbrains-mono
         noto-fonts-cjk-sans
       ];
       fontconfig = {
         defaultFonts = {
-          serif = ["nerd-fonts.ubuntu"];
-          sansSerif = ["nerd-fonts.ubuntu-sans"];
-          monospace = ["nerd-fonts.jetbrains-mono"];
+          serif = ["Noto Serif"];
+          sansSerif = ["Noto Sans"];
+          monospace = ["JetBrainsMono Nerd Font"];
         };
       };
     };
@@ -99,22 +97,136 @@
     users.users.mztski-zhk = {
       isNormalUser = true;
       extraGroups = ["wheel" "networkmanager" "video"];
-      # Your requested password hash
       hashedPassword = "$6$5VN3r4VBBPeB7PhY$FpevX.7qOf8M5OKPKNvQ2vRRxy6ny9LFVqdZFxjUwCy.UnU77vRcW8b5bVoqDK.R3YbgYtZbrJDaMnOY4AHZO/";
+      
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPL+DcGvwyp7PYJ88GB5oCZ2sps0XICDMQLZgqWvxMex"
+      ];
     };
+
 
     # <-- Audio Realtime Kit -->
     security.rtkit.enable = true;
 
+
     # <-- Firewall -->
-    networking.firewall.enable = false;
+    networking.firewall = {
+      enable = true;
+      # allowedTCPPorts = [  ];
+      trustedInterfaces = [ "tailscale0" ];
+    };
+
+    security.apparmor = {
+      enable = true;
+      enableCache = true;
+      killUnconfinedConfinables = true;
+      packages = [
+        pkgs.apparmor-parser
+      ];
+    };
+
+    services.fail2ban = {
+      enable = true;
+      # Ban IP after 5 failures
+      maxretry = 5;
+      ignoreIP = [
+        # Allow list for some subnets
+        "127.0.0.1/8" "172.16.0.0/12" "192.168.0.0/16" "100.64.0.0/10"
+        "8.8.8.8" "1.1.1.1" # allow a specific IP
+        "wiki.nixos.org" # resolve the IP via DNS
+      ];
+      bantime = "24h"; # Ban IPs for one day on the first ban
+      bantime-increment = {
+        enable = true; # Enable increment of bantime after each violation
+	formula = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
+	# multipliers = "1 2 4 8 16 32 64";
+	maxtime = "168h"; # Do not ban for more than 1 week
+	overalljails = true; # Calculate the bantime based on all the violations
+      };
+      jails = {
+        nginx-http-auth = ''
+          enabled  = true
+          port     = http,https
+          logpath  = /var/log/nginx/*.log
+          backend  = polling
+          journalmatch =
+        '';
+        nginx-botsearch = ''
+          enabled  = true
+          port     = http,https
+          logpath  = /var/log/nginx/*.log
+          backend  = polling
+          journalmatch =
+        '';
+        nginx-bad-request = ''
+          enabled  = true
+          port     = http,https
+          logpath  = /var/log/nginx/*.log
+          backend  = polling
+          journalmatch =
+        '';
+      };
+    };
+
+
+    # <-- VPN & mesh -->
+    services.tailscale.enable = true;
+    
 
     # <-- SSH & GPG -->
     programs.gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
     };
-    services.openssh.enable = true;
+
+    programs.mosh.enable = true;
+    services.openssh = {
+      enable = true;
+      ports = [ 14690 ];
+      settings = {
+        PasswordAuthentication = true;
+        KbdInteractiveAuthentication = true;
+        PermitRootLogin = "no";
+        AllowUsers = [ "mztski-zhk" ];
+      };
+    };
+
+
+    # <-- Nginx -->
+    services.nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+
+      appendHttpConfig = ''
+        # Enable content policy
+        add_header 'Referrer-Policy' 'origin-when-cross-origin';
+
+	# Disable embedding as a frame
+	add_header X-Frame-Options DENY;
+
+	# Prevent injection of code in other mime types (XSS Attacks)
+	add_header X-Content-Type-Options nosniff;
+      '';
+
+      virtualHosts."mztski-zhk.cc" =  {
+	enableACME = false;
+	forceSSL = false;
+	locations."/" = {
+	  proxyPass = "http://127.0.0.1:80";
+	  proxyWebsockets = false;
+	  extraConfig =
+	    # required when the target is also TLS server with multiple hosts
+	    "proxy_ssl_server_name on;" +
+	    # required when the server wants to use HTTP Authentication
+	    "proxy_pass_header Authorization;"
+	    ;
+	};
+      };
+    };
+
 
     # <-- Home Manager Integration -->
     home-manager = {
@@ -132,8 +244,9 @@
 
 
     # <-- Password -->
-    services.gnome.gnome-keyring.enable = false;
-    security.pam.services.greetd.enableGnomeKeyring = false;
+    services.gnome.gnome-keyring.enable = true;
+    security.pam.services.greetd.enableGnomeKeyring = true;
+
 
     # <-- Shell -->
     programs.zsh = {
@@ -152,7 +265,9 @@
         update = "nix flake update && sudo nixos-rebuild switch --flake /etc/nixos#nixos";
         nixos-clean = "sudo nix-collect-garbage --delete-older-than 7d";
         nixos-clean-all = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
-      };
+
+        direnv-init = "cp /etc/nixos/templates/direnv/python/flake.nix . && cp /etc/nixos/templates/direnv/.envrc . && git init -b main . && git add . && direnv allow && git commit -m 'Direnv init'";
+        };
 
       histSize = 10000;
       histFile = "$HOME/.zsh_history";
@@ -239,7 +354,7 @@
       Type = "idle";
       StandardInput = "tty";
       StandardOutput = "tty";
-      StandardError = "journal"; # Without this errors will spam on screen
+      StandardError = "journal";
       TTYReset = true;
       TTYVHangup = true;
       TTYVTDisallocate = true;
@@ -265,7 +380,6 @@
       ];
       files = [
         "/etc/machine-id"
-        # /etc/shadow is safely omitted
       ];
 
       users.mztski-zhk = {

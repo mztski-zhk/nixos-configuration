@@ -29,7 +29,7 @@
         
         outputs."eDP-1" = {
           mode = "2560x1600@165";
-          scale = 1.5;
+          scale = 1.75;
         };
         
         input.touchpad.natural-scroll = {};

@@ -17,6 +17,9 @@
     programs.gamemode.enable = true;
 
     environment.systemPackages = with pkgs; [
+      protontricks
+      cabextract
+
       lsfg-vk
       lsfg-vk-ui
 
