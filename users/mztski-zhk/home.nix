@@ -21,7 +21,7 @@
     enable = true;
     clock24 = true;
     mouse = true;
-    terminal = "foot";
+    terminal = "alacritty";
 
     extraConfig = ''
       set -g mouse on
@@ -29,7 +29,7 @@
       setw -g mode-keys vi
 
       set -g set-clipboard on
-      set -as terminal-features ',foot:clipboard'
+      set -as terminal-features ',alacritty:clipboard'
     '';
   };
 
@@ -79,47 +79,6 @@
   programs.alacritty = {
     enable = true;
   };
-
-  programs.foot.enable = true;
-
-#   programs.foot = {
-#     enable = true;
-#     settings = {
-#       
-#       # Keep your font settings from earlier!
-#       main = {
-#         font = "JetBrainsMono Nerd Font:size=12,monospace:size=12"; 
-#         pad = "15x15 center";
-#       };
-# 
-#       # Tokyo Night Storm Palette
-#       colors-dark = {
-#         alpha = "0.75";
-#         background = "24283b";
-#         foreground = "c0caf5";
-# 
-#        # Normal colors (0-7)
-#        regular0 = "1d202f"; # black
-#        regular1 = "f7768e"; # red
-#        regular2 = "9ece6a"; # green
-#        regular3 = "e0af68"; # yellow
-#        regular4 = "7aa2f7"; # blue
-#        regular5 = "bb9af7"; # magenta
-#        regular6 = "7dcfff"; # cyan
-#        regular7 = "a9b1d6"; # white
-
-        # Bright colors (8-15)
-#        bright0 = "414868"; # bright black
-#        bright1 = "f7768e"; # bright red
-#        bright2 = "9ece6a"; # bright green
-#        bright3 = "e0af68"; # bright yellow
-#        bright4 = "7aa2f7"; # bright blue
-#        bright5 = "bb9af7"; # bright magenta
-#        bright6 = "7dcfff"; # bright cyan
-#        bright7 = "c0caf5"; # bright white
-#      };
-#    };
-#  };
 
   programs.neovim = {
     enable = true;
@@ -203,7 +162,6 @@
       };
     };
   };
- 
 
   home.packages = with pkgs; [
     ripgrep
@@ -216,10 +174,10 @@
     websocat
     zenity
 
+    playerctl
     brightnessctl
     ddcutil
 
-    foot.terminfo
     wl-clipboard
     cliphist
     grim
@@ -248,12 +206,19 @@
 
     obsidian
 
+    wireguard-tools
+    proton-vpn
+    proton-vpn-cli
+
+    claude-code-router
+
     (prismlauncher.override {
     jdks = [
       zulu17
       zulu
       ];
     })
+    (llama-cpp.override { cudaSupport = true; })
   ];
 
   home.stateVersion = "25.11";

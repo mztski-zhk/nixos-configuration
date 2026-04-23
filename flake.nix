@@ -17,10 +17,12 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
   outputs = inputs:
     inputs.flake-parts.lib.mkFlake
+    inputs.hermes-agent.nixosModules.default
     {inherit inputs;}
     (inputs.import-tree ./modules);
 }

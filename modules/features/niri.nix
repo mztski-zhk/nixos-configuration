@@ -32,16 +32,22 @@
           scale = 1.75;
         };
         
-        input.touchpad.natural-scroll = {};
+        input.touchpad = {
+          natural-scroll = {};
+          tap = {};
+        };
 
         spawn-at-startup = [
           (lib.getExe self'.packages.myNoctalia)
           (lib.getExe pkgs.xwayland-satellite)
           #{ "foot" "--server" };
+          [ "niri" "msg" "action" "create-virtual-output" "--name" "'Virtual-1'"]
+
         ];
 
         input.keyboard = {
           xkb.layout = "us,ua";
+          numlock = {};
         };
       
         layout = {
@@ -68,32 +74,47 @@
           "Mod+K".focus-window-up = {};
           "Mod+L".focus-column-right = {};
 
-          "Mod+Ctrl+J".move-window-down-or-to-workspace-down = {};
-          "Mod+Ctrl+K".move-window-up-or-to-workspace-up = {};
-
-          "Mod+Shift+Ctrl+H".move-column-to-monitor-left = {};
-          "Mod+Shift+Ctrl+J".move-column-to-monitor-down = {};
-          "Mod+Shift+Ctrl+K".move-column-to-monitor-up = {};
-          "Mod+Shift+Ctrl+L".move-column-to-monitor-right = {};
+          "Mod+Ctrl+H".move-column-right = {};
+          "Mod+Ctrl+J".move-column-to-workspace-down = {};
+          "Mod+Ctrl+K".move-column-to-workspace-up = {};
+          "Mod+Ctrl+L".move-column-right = {};
 
           "Mod+Left".focus-column-left = {};
           "Mod+Down".focus-window-down = {};
           "Mod+Up".focus-window-up = {};
           "Mod+Right".focus-column-right = {};
 
-          "Mod+Ctrl+Down".move-window-down-or-to-workspace-down = {};
-          "Mod+Ctrl+Up".move-window-up-or-to-workspace-up = {};
-
-          "Mod+Shift+Ctrl+Left".move-column-to-monitor-left = {};
-          "Mod+Shift+Ctrl+Down".move-column-to-monitor-down = {};
-          "Mod+Shift+Ctrl+Up".move-column-to-monitor-up = {};
-          "Mod+Shift+Ctrl+Right".move-column-to-monitor-right = {};
+          "Mod+Ctrl+Left".move-column-left = {};
+          "Mod+Ctrl+Down".move-column-to-workspace-down = {};
+          "Mod+Ctrl+Up".move-column-to-workspace-up = {};
+          "Mod+Ctrl+Right".move-column-right = {};
 
           "Mod+BracketLeft".consume-or-expel-window-left = {};
           "Mod+BracketRight".consume-or-expel-window-right = {};
 
-          #"XF86MonBrightnessUp".allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-          #"XF86MonBrightnessDown".{ spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+          "Mod+C".center-column = {};
+          "Mod+Ctrl+C".center-visible-columns = {};
+
+          "Mod+Minus".set-column-width = "-10%";
+          "Mod+Equal".set-column-width = "+10%";
+
+          "Mod+Shift+Minus".set-window-height = "-10%";
+          "Mod+Shift+Equal".set-window-height = "+10%";
+
+          "Mod+Ctrl+V".toggle-window-floating = {};
+
+          "XF86MonBrightnessUp".spawn = ["brightnessctl" "set" "+10%"]; 
+          "XF86MonBrightnessDown".spawn = ["brightnessctl" "set" "10%-" ]; 
+
+          "XF86AudioRaiseVolume".spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0";
+          "XF86AudioLowerVolume".spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-";
+          "XF86AudioMute".spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          "XF86AudioMicMute".spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+
+          "XF86AudioPlay".spawn-sh = "playerctl play-pause";
+          "XF86AudioStop".spawn-sh = "playerctl stop";
+          "XF86AudioPrev".spawn-sh = "playerctl previous";
+          "XF86AudioNext".spawn-sh = "playerctl next";
         };
       };
     };

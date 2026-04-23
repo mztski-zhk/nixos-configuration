@@ -23,8 +23,11 @@
     # <-- Core System Settings -->
     nix.settings.experimental-features = ["nix-command" "flakes"];
     nixpkgs.config.allowUnfree = true;
-    networking.hostName = "nixos";
-    networking.networkmanager.enable = true;
+    networking = {
+      hostName = "nixos";
+      networkmanager.enable = true;
+      networkmanager.insertNameservers = [ "100.100.10.1" "9.9.9.11" "1.1.1.2" ];
+    };
     time.timeZone = "Asia/Hong_Kong";
     i18n.defaultLocale = "en_US.UTF-8";
 
@@ -169,9 +172,27 @@
     };
 
 
+    # <-- Security -->
+    # Permission of podman rootful
+    security.sudo.extraRules = [{
+      users = [ "mztski-zhk" ];
+      commands = [{
+        command = "/run/current-system/sw/bin/podman";
+        options = [ "NOPASSWD" ];
+      }];
+    }];
+
+
     # <-- VPN & mesh -->
     services.tailscale.enable = true;
     
+
+    # <-- Remote control -->
+    services.sunshine = {
+      enable = true;
+      autoStart = true;
+      capSysAdmin = true;
+    };
 
     # <-- SSH & GPG -->
     programs.gnupg.agent = {
@@ -262,6 +283,7 @@
         lt = "ls -altFh";
         lx = "ls -lXB";
 
+        rebuild = "cd /etc/nixos && sudo nixos-rebuild switch --flake .#nixos && cd -";
         update = "nix flake update && sudo nixos-rebuild switch --flake /etc/nixos#nixos";
         nixos-clean = "sudo nix-collect-garbage --delete-older-than 7d";
         nixos-clean-all = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
