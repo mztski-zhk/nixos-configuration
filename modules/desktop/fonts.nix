@@ -1,0 +1,22 @@
+{ self, inputs, ... }: {
+  flake.modules.nixos.desktop.fonts = { pkgs, ... }: {
+    fonts = {
+      enableDefaultPackages = true;
+      packages = with pkgs; [
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-cjk-serif
+        noto-fonts-color-emoji
+        jetbrains-mono
+        nerd-fonts.jetbrains-mono
+      ];
+      fontconfig = {
+        defaultFonts = {
+          serif = ["Noto Serif"];
+          sansSerif = ["Noto Sans"];
+          monospace = ["JetBrainsMono Nerd Font"];
+        };
+      };
+    };
+  };
+}
