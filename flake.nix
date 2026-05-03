@@ -1,5 +1,5 @@
 {
-  description = "Modular NixOS Flake with Impermanence and Home Manager";
+  description = "Dendritic Modulor Nixos Flake Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -9,6 +9,7 @@
     import-tree.url = "github:vic/import-tree";
     wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
     impermanence.url = "github:nix-community/impermanence";
+    catppuccin.url = "github:catppuccin/nix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,12 +18,9 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake
-    inputs.hermes-agent.nixosModules.default
-    {inherit inputs;}
-    (inputs.import-tree ./modules);
+    inputs.flake-parts.lib.mkFlake { inherit inputs; }
+      (inputs.import-tree ./modules);
 }
