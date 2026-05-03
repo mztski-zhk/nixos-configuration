@@ -1,15 +1,8 @@
 { self, ... }: {
-  flake.nixosModules.nixos = {
+  flake.nixosModules.nix = {
     # <-- Ultimate nixos config -->
     imports = with self.nixosModules; [
       nixSettings
-
-      audio
-      features
-      home
-      hosts
-      security
-      services
     ];
   };
 }

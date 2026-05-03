@@ -35,7 +35,7 @@
         input = {
           touchpad = {
             natural-scroll = {};
-            tab = {};
+            tap = {};
           };
           keyboard = {
             xkb.layout = "us,ua";

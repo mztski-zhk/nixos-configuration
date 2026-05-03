@@ -1,8 +1,7 @@
 { self, ... }: {
-  flake.nixosModules.desktop = {
+  flake.nixosModules.fix = {
     imports = with self.nixosModules; [
-      greetd
-      niri
+      fixOpenldap
     ];
   };
 }

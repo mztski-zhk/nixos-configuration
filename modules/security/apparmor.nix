@@ -1,5 +1,5 @@
 { ... }: {
-  flake.nixosModules.apparmor = {
+  flake.nixosModules.apparmor = { pkgs, ... }: {
     security.apparmor = {
       enable = true;
       enableCache = true;
@@ -8,5 +8,6 @@
         pkgs.apparmor-parser
       ];
     };
+    services.dbus.apparmor = "enabled";
   };
 }

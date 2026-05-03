@@ -3,6 +3,7 @@
     imports = with self.nixosModules; [
       asus
       boot
+      dbus
       driver
       hardware
       impermanence

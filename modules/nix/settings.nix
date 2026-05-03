@@ -21,6 +21,9 @@
 
     # <-- Nix Save Space -->
     nix.optimise.automatic = true;
+
+    # <-- Reduce re-prompt -->
+    nix.settings.trusted-users = [ "root" "mztski-zhk" ];
     
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";

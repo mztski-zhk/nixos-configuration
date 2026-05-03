@@ -1,5 +1,5 @@
 { ... }: {
-  flake.nixosModules.driver = {
+  flake.nixosModules.driver = { lib, ... }: {
     # <-- Power control -->
     services.power-profiles-daemon.enable = true;
 

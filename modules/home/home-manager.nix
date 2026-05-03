@@ -12,7 +12,7 @@
       # Point to your modularized user home.nix
       users.mztski-zhk = {
         imports = [
-          ../../../users/mztski-zhk/home.nix
+          ../../users/mztski-zhk/home.nix
         ];
       };
     };

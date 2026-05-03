@@ -1,10 +1,11 @@
 { ... }: {
-  flake.nixosModules.vpn = {
+  flake.nixosModules.vpn = { config, ... }: {
     # <-- VPN -->
     services.tailscale.enable = true;
     networking.firewall = {
       trustedInterfaces = [ "tailscale0" ];
       allowedUDPPorts = [ config.services.tailscale.port ];
       checkReversePath = "loose";
+    };
   };
 }
