@@ -1,7 +1,5 @@
-{ ... }: {
-  flake.homeManagerModules.alacritty = {
-    programs.alacritty = {
-      enable = true;
-    };
+{
+  programs.alacritty = {
+    enable = true;
   };
 }

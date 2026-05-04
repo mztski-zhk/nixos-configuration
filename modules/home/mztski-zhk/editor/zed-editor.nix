@@ -1,13 +1,10 @@
-{ ... }: {
-  flake.homeManagerModules.zed-editor = { pkgs, lib, ... }: {
-    programs.zed-editor = {
-      enable = true;
-      extensions = [ "nix" "toml" "rust" ];
-      userSettings = {
+{ pkgs, lib, ... }: {
+  programs.zed-editor = {
+    enable = true;
+    extensions = [ "nix" "toml" "rust" ];
+    userSettings = {
 	theme = {
 	  mode = "system";
-	  # dark = "One Dark";
-	  # light = "One Light";
 	};
 
 	language_models = {

@@ -1,23 +1,21 @@
 { inputs, ... }: {
-  flake.homeManagerModules.catppuccin = {
-    imports = [
-      inputs.catppuccin.homeModules.catppuccin
-    ];
+  imports = [
+    inputs.catppuccin.homeModules.catppuccin
+  ];
 
-    catppuccin = {
-      enable = true;
-      flavor = "macchiato";
-      cache.enable = true;
+  catppuccin = {
+    enable = true;
+    flavor = "macchiato";
+    cache.enable = true;
 
-      cursors = {
+    cursors = {
 	enable = true;
 	accent = "lavender";
-      };
+    };
 
-      cava = {
+    cava = {
 	enable = true;
 	transparent = true;
-      };
     };
   };
 }

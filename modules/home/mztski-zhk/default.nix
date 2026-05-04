@@ -1,81 +1,79 @@
-{ self, ... }: {
-  flake.homeManagerModules.home = { pkgs, ... }: {
-    imports = with self.homeManagerModules; [
-      cli
-      desktop
-      develop
-      editor
-      terminal
-    ];
+{ pkgs, ... }: {
+  imports = [
+    ./cli
+    ./desktop
+    ./develop
+    ./editor
+    ./terminal
+  ];
 
-    home = {
-      username = "mztski-zhk";
-      homeDirectory = "/home/mztski-zhk";
+  home = {
+    username = "mztski-zhk";
+    homeDirectory = "/home/mztski-zhk";
 
-      sessionVariables = {
+    sessionVariables = {
 	NIXOS_OZONE_WL = "1";
-      };
     };
+  };
 
 
-    home.packages = with pkgs; [
-      ripgrep
-      fd
-      gcc
-      unzip
-      gnutar
-      p7zip
+  home.packages = with pkgs; [
+    ripgrep
+    fd
+    gcc
+    unzip
+    gnutar
+    p7zip
 
-      websocat
-      zenity
+    websocat
+    zenity
 
-      pavucontrol
-      blueman
-      networkmanagerapplet
+    pavucontrol
+    blueman
+    networkmanagerapplet
 
-      playerctl
-      brightnessctl
-      ddcutil
-      wireplumber
+    playerctl
+    brightnessctl
+    ddcutil
+    wireplumber
 
-      wl-clipboard
-      cliphist
-      grim
-      slurp
+    wl-clipboard
+    cliphist
+    grim
+    slurp
 
-      yazi
-      fuzzel
+    yazi
+    fuzzel
 
-      awww
-      cava
+    awww
+    cava
 
-      ffmpeg
+    ffmpeg
 
-      fastfetch
-      btop
-      nvtopPackages.full
+    fastfetch
+    btop
+    nvtopPackages.full
 
-      python3
-      nodejs
+    python3
+    nodejs
 
-      pinentry-all # GnuPG
-      rbw
+    pinentry-all
+    rbw
 
-      discord
+    discord
 
-      obsidian
+    obsidian
 
-      wireguard-tools
-      proton-vpn
-      proton-vpn-cli
+    wireguard-tools
+    proton-vpn
+    proton-vpn-cli
 
-      (prismlauncher.override {
-      jdks = [
+    (prismlauncher.override {
+    jdks = [
 	zulu17
 	zulu
 	];
-      })
-      (llama-cpp.override { cudaSupport = true; })
-    ];
-  };
+    })
+    (llama-cpp.override { cudaSupport = true; })
+  ];
 }
