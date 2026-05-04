@@ -1,6 +1,6 @@
 {
   imports = [
-    ./git
-    ./tmux
+    ./git.nix
+    ./tmux.nix
   ];
 }

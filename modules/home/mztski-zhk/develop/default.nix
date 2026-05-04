@@ -1,5 +1,5 @@
 {
   imports = [
-    ./direnv
+    ./direnv.nix
   ];
 }
