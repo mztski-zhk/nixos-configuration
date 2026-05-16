@@ -33,7 +33,7 @@
           undodir = "${config.home.homeDirectory}/.local/state/nvim/undo";
           visualbell = true;
 
-          foldlevel = 2;
+          foldlevel = 99;
           foldlevelstart = 99;
           foldenable = true;
         };
@@ -395,7 +395,7 @@
           context = {
             enable = true;
             setupOpts = {
-              max_lines = 2;
+              max_lines = 4;
               trim_scope = "outer";
             };
           };
