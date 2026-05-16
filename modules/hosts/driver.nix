@@ -1,5 +1,9 @@
-{ ... }: {
-  flake.nixosModules.driver = { lib, ... }: {
+{...}: {
+  flake.nixosModules.driver = {
+    config,
+    lib,
+    ...
+  }: {
     # <-- Power control -->
     services.power-profiles-daemon.enable = true;
 
@@ -7,8 +11,8 @@
     hardware.graphics.enable = true;
     hardware.graphics.enable32Bit = true;
 
-    boot.initrd.kernelModules = [ "amdgpu" ];
-    services.xserver.videoDrivers = [ "nvidia" ];
+    boot.initrd.kernelModules = ["amdgpu"];
+    services.xserver.videoDrivers = ["nvidia"];
 
     hardware.nvidia = {
       modesetting.enable = true;
@@ -16,6 +20,7 @@
       powerManagement.finegrained = true;
       open = true;
       nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
 
       # Hybrid Graphic
       prime = {

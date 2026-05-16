@@ -381,8 +381,8 @@
       "favorites": []
     },
     "appLauncher": {
-      "enableClipboardHistory": false,
-      "autoPasteClipboard": false,
+      "enableClipboardHistory": true,
+      "autoPasteClipboard": true,
       "enableClipPreview": true,
       "clipboardWrapText": true,
       "clipboardWatchTextCommand": "wl-paste --type text --watch cliphist store",
@@ -391,7 +391,7 @@
       "pinnedApps": [],
       "useApp2Unit": false,
       "sortByMostUsed": true,
-      "terminalCommand": "foot --server",
+      "terminalCommand": "ghostty",
       "customLaunchPrefixEnabled": false,
       "customLaunchPrefix": "",
       "viewMode": "list",

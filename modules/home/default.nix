@@ -1,8 +1,10 @@
 { self, ... }: {
+  # <-- home manager module -->
   flake.nixosModules.home = {
-    imports = with self.nixosModules; [
-      users
-      ./_home-manager.nix
+    # this is the nixos entrypoint for home-manager
+    imports = [
+      self.nixosModules.users
+      self.nixosModules.home-manager
     ];
   };
 }

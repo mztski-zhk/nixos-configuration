@@ -1,18 +1,33 @@
-{ ... }: {
-  flake.homeManagerModules.tmux = {
+{...}: {
+  flake.homeModules.tmux = {
     programs.tmux = {
       enable = true;
-      clock24 = true;
+      baseIndex = 1;
+      keyMode = "vi";
+      clock24 = false;
       mouse = true;
-      terminal = "alacritty";
+      newSession = true;
+      terminal = "ghostty";
+      historyLimit = 9999;
 
       extraConfig = ''
-	set -g mouse on
+        # change prefix
+        unbind C-b
+        set -g prefix C-a
+        bind C-a send-prefix
 
-	setw -g mode-keys vi
+        set -g default-terminal "tmux-256color"
 
-	set -g set-clipboard on
-	set -as terminal-features ',alacritty:clipboard'
+        set -g renumber-windows on
+
+        set -g allow-passthrough all
+        set -g extended-keys on
+
+        set -g set-clipboard on
+        set -as terminal-features ',ghostty:clipboard'
+
+        # Select on copy while not clearing selection
+        bind -Tcopy-mode MouseDragEnd1Pane send -X copy-selection-no-clear
       '';
     };
   };

@@ -1,15 +1,17 @@
-{ pkgs, ... }: {
-  programs.chromium = {
-    enable = true;
-    package = pkgs.brave;
+{ ... }: {
+  flake.homeModules.brave = { pkgs, ... }: {
+    programs.chromium = {
+      enable = true;
+      package = pkgs.brave;
 
-    commandLineArgs = [
+      commandLineArgs = [
 	"--ozone-platform-hint=auto"
 	"--enable-features=WaylandWindowDecorations"
-    ];
+      ];
 
-    extensions = [
+      extensions = [
 
-    ];
+      ];
+    };
   };
 }

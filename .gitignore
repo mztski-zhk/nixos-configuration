@@ -1,0 +1,10 @@
+*.swp
+
+result
+\$HOME
+$HOME/
+
+skills-lock.json
+
+modules/home/mztski-zhk/ai/pi-config/
+.agents/

@@ -1,7 +1,14 @@
 { self, ... }: {
-  flake.homeManagerModules.editor = {
-    imports = with self.homeManagerModules; [
-      neovim
+  # <-- define tui editors -->
+  flake.homeModules.tuiEditors = {
+    imports = with self.homeModules; [
+      nvf
+    ];
+  };
+
+  # <-- define gui editors -->
+  flake.homeModules.guiEditors = {
+    imports = with self.homeModules; [
       vscode
       zed-editor
     ];

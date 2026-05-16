@@ -10,8 +10,13 @@
     wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
     impermanence.url = "github:nix-community/impermanence";
     catppuccin.url = "github:catppuccin/nix";
+    llm-agents.url = "github:numtide/llm-agents.nix";
     home-manager = {
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nvf = {
+      url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
@@ -21,6 +26,10 @@
   };
 
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; }
-      (inputs.import-tree ./modules);
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        inputs.home-manager.flakeModules.home-manager
+        (inputs.import-tree ./modules)
+      ];
+    };
 }

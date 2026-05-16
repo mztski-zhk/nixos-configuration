@@ -4,8 +4,12 @@
     services.greetd = {
       enable = true;
       settings = {
+        initial_session = {
+        user = "mztski-zhk";
+        command = "niri-session";
+        };
         default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd niri-session";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --remember --remember-session --cmd niri-session";
         user = "greeter";
         };
       };

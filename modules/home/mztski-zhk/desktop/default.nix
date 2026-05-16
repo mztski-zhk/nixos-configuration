@@ -1,12 +1,16 @@
-{ self, ... }: {
-  flake.homeManagerModules.desktop = {
-    imports = with self.homeManagerModules; [
-      brave
+{self, ...}: {
+  flake.homeModules.desktop = {
+    imports = with self.homeModules; [
       catppuccin
       gtk
       qt
-      vivaldi
       xdg
+
+      cliphist
+
+      swaylock
+
+      brave
     ];
   };
 }

@@ -1,5 +1,5 @@
 { ... }: {
-  flake.homeManagerModules.qt = {
+  flake.homeModules.qt = {
     qt = {
       enable = true;
       platformTheme.name = "qtct";

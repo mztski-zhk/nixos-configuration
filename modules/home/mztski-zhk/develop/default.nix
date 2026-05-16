@@ -1,5 +1,7 @@
-{
-  imports = [
-    ./direnv.nix
-  ];
+{ self, ... }: {
+  flake.homeModules.develop = {
+    imports = with self.homeModules; [
+      direnv
+    ];
+  };
 }
