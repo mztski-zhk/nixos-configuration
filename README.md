@@ -13,7 +13,7 @@ This is my nixos configuration with my daily & server use.
 
   ````bash
   sudo nixos-rebuild switch .#nixos
-  ```
+  ````
 
 - Raspberry Pi 5
   
@@ -23,7 +23,7 @@ This is my nixos configuration with my daily & server use.
 
   ````bash
   sudo nixos-rebuild switch .#resp
-  ```
+  ````
 
 - Arch Laptop
   
@@ -33,7 +33,7 @@ This is my nixos configuration with my daily & server use.
 
   ````bash
   sudo nixos-rebuild switch .#arch
-  ```
+  ````
 
 ## Architecture
 
