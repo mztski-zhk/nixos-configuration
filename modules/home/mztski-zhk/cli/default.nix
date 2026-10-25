@@ -5,6 +5,7 @@
     imports = with self.homeModules; [
       git
       bat
+      fzf
       zoxide
       tmux
       tools

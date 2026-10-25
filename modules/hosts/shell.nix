@@ -26,7 +26,6 @@
         update = "nix flake update && sudo nixos-rebuild switch --flake /etc/nixos#nixos";
         nixos-clean = "sudo nix-collect-garbage --delete-older-than 7d";
         nixos-clean-all = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
-        nixpkgs = "nh search --limit 7 | less";
 
         direnv-init = "cp /etc/nixos/templates/direnv/python/flake.nix . && cp /etc/nixos/templates/direnv/.envrc . && git init -b main . && git add . && direnv allow && git commit -m 'Direnv init'";
       };
@@ -38,6 +37,9 @@
       ];
 
       interactiveShellInit = ''
+        nixpkgs() {
+          nh search "$1" | less +G
+        }
         export COLORTERM=truecolor
 
         export EDITOR="nvim"
@@ -45,8 +47,8 @@
         bindkey '^[[1;5C' forward-word
         bindkey '^[[1;5D' backward-word
 
-       export CUDA_PATH=${pkgs.cudatoolkit}
-       export EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib"
+        export CUDA_PATH=${pkgs.cudatoolkit}
+        export EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib"
         export EXTRA_CCFLAGS="-I/usr/include"
 
         eval "$(zoxide init zsh)"
