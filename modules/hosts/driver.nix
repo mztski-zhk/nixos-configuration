@@ -2,8 +2,16 @@
   flake.nixosModules.driver = {
     config,
     lib,
+    pkgs,
     ...
   }: {
+    # <-- Cuda driver -->
+    environment.systemPackages = with pkgs; [
+      cudatoolkit
+      linuxPackages.nvidia_x11
+    ];
+    nixpkgs.config.cudaSupport = true;
+
     # <-- Power control -->
     services.power-profiles-daemon.enable = true;
 

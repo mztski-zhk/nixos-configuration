@@ -7,7 +7,8 @@ This is my nixos configuration with my daily & server use.
 ## My device
 
 - Asus Laptop
-  Is the main device of this config.
+
+  > Is the main device of this config.
 
   Use it with:
 
@@ -55,7 +56,7 @@ Subdirectories will containing similar functioning modules, which will all impor
 
 The file `default.nix` will be a module holding all sub-modules in the directory.
 
-Then, they will be imported in `/sets`.
+Then, they will be imported in `/sets` with their function.
 
 Finally, depends on **set**'s functioning, import in a **profile**.
 
@@ -75,4 +76,3 @@ Which allows me (a noob) can easily write and manage my configurations.
 I appreciate and welcome everyone give me an issue on any kind of improvements.
 
 Apparently, this repo still have many flaws, so don't be too judgemental to me XD.
-

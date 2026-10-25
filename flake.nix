@@ -31,5 +31,14 @@
         inputs.home-manager.flakeModules.home-manager
         (inputs.import-tree ./modules)
       ];
+      perSystem = {system, ...}: {
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+
+          # OR use the strict predicate if you prefer:
+          # config.allowUnfreePredicate = pkg: builtins.elem (inputs.nixpkgs.lib.getName pkg) [ "replace" ];
+        };
+      };
     };
 }

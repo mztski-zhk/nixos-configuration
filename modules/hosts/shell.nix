@@ -44,6 +44,12 @@
 
         bindkey '^[[1;5C' forward-word
         bindkey '^[[1;5D' backward-word
+
+       export CUDA_PATH=${pkgs.cudatoolkit}
+       export EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib"
+        export EXTRA_CCFLAGS="-I/usr/include"
+
+        eval "$(zoxide init zsh)"
       '';
     };
     users.defaultUserShell = pkgs.zsh;

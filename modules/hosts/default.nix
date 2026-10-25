@@ -1,5 +1,5 @@
-{ self, ... }: {
-  flake.nixosModules.hosts = { pkgs, ... }: {
+{self, ...}: {
+  flake.nixosModules.hosts = {pkgs, ...}: {
     imports = with self.nixosModules; [
       asus
       boot
@@ -8,6 +8,7 @@
       hardware
       impermanence
       networking
+      bluetooth
       shell
       ssh
       starship

@@ -9,7 +9,7 @@
   # <-- define gui editors -->
   flake.homeModules.guiEditors = {
     imports = with self.homeModules; [
-      vscode
+      # vscode ## dep failed, disable temporary
       zed-editor
     ];
   };
